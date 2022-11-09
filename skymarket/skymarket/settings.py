@@ -88,8 +88,6 @@ REST_FRAMEWORK = {
 DJOSER = {
 }
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -101,6 +99,10 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+FIXTURE_DIRS = [
+    'fixtures',
+]
 
 
 # Password validation
