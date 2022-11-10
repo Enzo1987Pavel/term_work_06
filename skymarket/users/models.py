@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser
+from django.core.validators import MinLengthValidator
 from django.db import models
 from users.managers import UserManager, UserRoles
 from phonenumber_field.modelfields import PhoneNumberField
@@ -6,19 +7,19 @@ from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractBaseUser):
-    first_name = models.CharField(max_length=100, verbose_name="Имя пользователя")
-    last_name = models.CharField(max_length=100, verbose_name="Фамилия пользователя")
-    phone = PhoneNumberField(verbose_name="Телефон для связи")
-    email = models.EmailField(unique=True, verbose_name="Электронная почта пользователя")
+    first_name = models.CharField(max_length=100, validators=[MinLengthValidator(1)], verbose_name="Имя пользователя")
+    last_name = models.CharField(max_length=100, validators=[MinLengthValidator(1)], verbose_name="Фамилия пользователя")
+    phone = PhoneNumberField(validators=[MinLengthValidator(1)], verbose_name="Телефон для связи")
+    email = models.EmailField(max_length=100, unique=True, validators=[MinLengthValidator(1)], verbose_name="Электронная почта пользователя")
     role = models.CharField(max_length=5, verbose_name="Роль пользователя", choices=UserRoles.choices, default=UserRoles.USER)
-    is_active = models.BooleanField(default=False)
-    image = models.ImageField(verbose_name="Аватарка пользователя")
+    is_active = models.BooleanField(default=True)
+    image = models.ImageField(verbose_name="Аватарка пользователя", null=True, blank=True)
 
     # эта константа определяет поле для логина пользователя
     USERNAME_FIELD = "email"
 
     # эта константа содержит список с полями, которые необходимо заполнить при создании пользователя
-    REQUIRED_FIELDS = ["first_name", "last_name", "phone", "role"]
+    REQUIRED_FIELDS = ["first_name", "last_name", "phone", "image"]
 
     objects = UserManager()
 

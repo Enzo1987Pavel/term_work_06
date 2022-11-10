@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -81,7 +82,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "skymarket.wsgi.application"
 
-
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 4,
@@ -90,33 +90,35 @@ REST_FRAMEWORK = {
     ]
 }
 
-
-DJOSER = {
-    'SERIALIZERS': {
-        'user_create': 'users.serializers.UserRegistrationSerializer'
-    },
-    'LOGIN_FIELD': 'email'
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKEN": True,
 }
 
+DJOSER = {
+    "SERIALIZERS": {
+        "user_create": "users.serializers.UserRegistrationSerializer",
+        "user": "users.serializers.CurrentUserSerializer",
+        "current_user": "users.serializers.CurrentUserSerializer",
+    },
+    "LOGIN_FIELD": "email"
+}
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'skymarket',
-        'USER': 'skymarket',
-        'PASSWORD': 'skymarket',
-        'HOST': 'localhost',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "skymarket",
+        "USER": "skymarket",
+        "PASSWORD": "skymarket",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
 FIXTURE_DIRS = [
-    'fixtures',
+    "fixtures",
 ]
-
-
-# Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -133,10 +135,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
-
 LANGUAGE_CODE = "ru"
 
 TIME_ZONE = "UTC"
@@ -147,8 +145,6 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
 STATIC_URL = "/django_static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "django_static")
 
@@ -159,8 +155,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "django_media")
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
