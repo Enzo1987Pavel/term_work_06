@@ -3,7 +3,6 @@ from django.db import models
 
 
 class Ad(models.Model):
-    # TODO добавьте поля модели здесь
     pass
 
 
