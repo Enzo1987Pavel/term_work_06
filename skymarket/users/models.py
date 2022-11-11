@@ -19,7 +19,7 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = "email"
 
     # эта константа содержит список с полями, которые необходимо заполнить при создании пользователя
-    REQUIRED_FIELDS = ["first_name", "last_name", "phone", "image"]
+    REQUIRED_FIELDS = ["first_name", "last_name", "phone", "role"]
 
     objects = UserManager()
 
