@@ -6,7 +6,7 @@ from rest_framework import permissions
 
 from ads.models import Ad, Comment
 from ads.filters import AdFilter
-from ads.serializers import AdSerializer
+from ads.serializers import AdSerializer, AdDetailSerializer
 
 
 class AdPagination(pagination.PageNumberPagination):
@@ -31,6 +31,12 @@ class AdViewSet(viewsets.ModelViewSet):
         else:
             self.permission_classes = [permissions.IsAdminUser]
         return super().get_permissions()
+
+    # def get_serializer_class(self):
+    #     if self.action == "retrieve":
+    #         return AdDetailSerializer
+    #     return AdSerializer
+
 
     @action(methods=["GET"], detail=False)
     def me(self, request, *args, **kwargs):
