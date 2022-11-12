@@ -94,11 +94,12 @@ REST_FRAMEWORK = {
     ]
 }
 
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKEN": True,
-}
+# SIMPLE_JWT = {
+#     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+#     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+#     "ROTATE_REFRESH_TOKEN": True,
+#     "AUTH_HEADER_TYPES": ("Bearer",),
+# }
 
 DJOSER = {
     "SERIALIZERS": {
@@ -120,9 +121,7 @@ DATABASES = {
     }
 }
 
-FIXTURE_DIRS = [
-    "fixtures",
-]
+FIXTURE_DIRS = ('term_work_06/skymarket/fixtures/',)
 
 AUTH_PASSWORD_VALIDATORS = [
     {

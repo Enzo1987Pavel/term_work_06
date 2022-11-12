@@ -13,13 +13,13 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=100, unique=True, validators=[MinLengthValidator(1)], verbose_name="Электронная почта пользователя")
     role = models.CharField(max_length=5, verbose_name="Роль пользователя", choices=UserRoles.choices, default=UserRoles.USER)
     is_active = models.BooleanField(default=True)
-    image = models.ImageField(verbose_name="Аватарка пользователя", null=True, blank=True)
+    image = models.ImageField(verbose_name="Аватарка пользователя", null=True)
 
     # эта константа определяет поле для логина пользователя
     USERNAME_FIELD = "email"
 
     # эта константа содержит список с полями, которые необходимо заполнить при создании пользователя
-    REQUIRED_FIELDS = ["first_name", "last_name", "phone", "role"]
+    REQUIRED_FIELDS = ["first_name", "last_name", "phone", "role", "image"]
 
     objects = UserManager()
 

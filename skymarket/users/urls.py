@@ -7,6 +7,7 @@ users_router = SimpleRouter()
 
 users_router.register("users", UserViewSet, basename="users")
 
+
 urlpatterns = [
     path("", include(users_router.urls)),
     path("token/", views.TokenObtainPairView.as_view(), name="access_token"),

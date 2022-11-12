@@ -3,10 +3,11 @@ from rest_framework import pagination, viewsets
 from rest_framework.decorators import action
 
 from rest_framework import permissions
+from rest_framework.generics import get_object_or_404
 
 from ads.models import Ad, Comment
 from ads.filters import AdFilter
-from ads.serializers import AdSerializer, AdDetailSerializer
+from ads.serializers import AdSerializer, AdDetailSerializer, CommentSerializer
 
 
 class AdPagination(pagination.PageNumberPagination):
@@ -32,11 +33,10 @@ class AdViewSet(viewsets.ModelViewSet):
             self.permission_classes = [permissions.IsAdminUser]
         return super().get_permissions()
 
-    # def get_serializer_class(self):
-    #     if self.action == "retrieve":
-    #         return AdDetailSerializer
-    #     return AdSerializer
-
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return AdDetailSerializer
+        return AdSerializer
 
     @action(methods=["GET"], detail=False)
     def me(self, request, *args, **kwargs):
@@ -45,4 +45,14 @@ class AdViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        ad_instance = get_object_or_404(Ad, id=self.kwargs["ad_pk"])
+        return ad_instance.comment_set.all()
+
+    def perform_create(self, serializer):
+        ad_instance = get_object_or_404(Ad, id=self.kwargs["ad_pk"])
+        user = self.request.user
+        serializer.save(author=user, ad=ad_instance)
 
