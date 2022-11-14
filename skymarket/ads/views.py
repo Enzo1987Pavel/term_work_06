@@ -55,7 +55,7 @@ class AdViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    lookup_field = 'id'
+    lookup_field = "id"
     http_method_names = ["get", "post", "patch", "delete"]
 
     def get_queryset(self):

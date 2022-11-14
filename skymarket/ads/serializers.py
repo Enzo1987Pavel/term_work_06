@@ -28,20 +28,21 @@ class AdListSerializer(serializers.ModelSerializer):
 
 
 class AdSerializer(serializers.ModelSerializer):
-    author_first_name = serializers.CharField(max_length=50, source="author.first_name", read_only=True)
-    author_last_name = serializers.CharField(max_length=50, source="author.last_name", read_only=True)
-    phone = serializers.CharField(max_length=10, source="author.phone", read_only=True)
+    author_id = serializers.IntegerField(source="author.id", read_only=True)
+    author_first_name = serializers.CharField(source="author.first_name", read_only=True)
+    author_last_name = serializers.CharField(source="author.last_name", read_only=True)
+    phone = serializers.CharField(source="author.phone", read_only=True)
 
     class Meta:
         model = Ad
         fields = [
-            'pk',
-            'image',
-            'title',
-            'price',
-            'phone',
-            'description',
-            'author_first_name',
-            'author_last_name',
-            'author_id'
+            "pk",
+            "image",
+            "title",
+            "price",
+            "phone",
+            "description",
+            "author_first_name",
+            "author_last_name",
+            "author_id"
         ]

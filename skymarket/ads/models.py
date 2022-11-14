@@ -11,7 +11,7 @@ class Ad(models.Model):
     description = models.TextField(max_length=1000, null=True, blank=True, verbose_name="Описание")
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
     created_at = models.DateTimeField(auto_now=True)
-    image = models.ImageField(null=True, blank=True, verbose_name="Картинка")
+    image = models.ImageField(null=True, blank=True, verbose_name="Изображение")
 
     class Meta:
         verbose_name = "Объявление"
