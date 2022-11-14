@@ -1,34 +1,37 @@
-from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.validators import MinLengthValidator, MinValueValidator
 from django.db import models
+
+User = get_user_model()
 
 
 class Ad(models.Model):
-    title = models.CharField(max_length=100, null=False, verbose_name="Название товара")
-    price = models.PositiveIntegerField(null=False, verbose_name="Цена товара")
-    description = models.CharField(max_length=250, default=False, verbose_name="Описание товара")
-    author = models.ForeignKey("users.User", on_delete=models.CASCADE, null=True, blank=True, verbose_name="Имя пользователя, создавшего объявление")
-    create_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="Время и дата создания объявления")
-    image = models.ImageField(verbose_name="Изображение объявления", null=True)
+    title = models.CharField(max_length=200, validators=[MinLengthValidator(1)], verbose_name="Название")
+    price = models.IntegerField(validators=[MinValueValidator(0)], verbose_name="Цена")
+    description = models.TextField(max_length=1000, null=True, blank=True, verbose_name="Описание")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
+    created_at = models.DateTimeField(auto_now=True)
+    image = models.ImageField(null=True, blank=True, verbose_name="Картинка")
 
     class Meta:
         verbose_name = "Объявление"
         verbose_name_plural = "Объявления"
-        ordering = ["-create_at"]
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.title
 
 
 class Comment(models.Model):
-    text = models.CharField(max_length=200, null=False, verbose_name="Текст отзыва")
-    author = models.ForeignKey("users.User", on_delete=models.CASCADE, null=False, verbose_name="Имя пользователя, создавшего отзыв")
-    ad = models.ForeignKey(Ad, on_delete=models.CASCADE, null=False, verbose_name="Описание товара")
-    create_at = models.DateTimeField(auto_now_add=True, null=False, verbose_name="Время и дата создания отзыва")
+    text = models.TextField(verbose_name="Текст", max_length=1000, validators=[MinLengthValidator(1)])
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE, verbose_name="Объявление")
+    created_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Отзыв"
-        verbose_name_plural = "Отзывы"
-        ordering = ["-create_at"]
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.text

@@ -1,25 +1,28 @@
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser
 from django.core.validators import MinLengthValidator
 from django.db import models
-from users.managers import UserManager, UserRoles
+
 from phonenumber_field.modelfields import PhoneNumberField
-from django.utils.translation import gettext_lazy as _
+
+from .managers import UserManager
+
+
+class UserRoles(models.TextChoices):
+    USER = "user"
+    ADMIN = "admin"
 
 
 class User(AbstractBaseUser):
-    first_name = models.CharField(max_length=100, validators=[MinLengthValidator(1)], verbose_name="Имя пользователя")
-    last_name = models.CharField(max_length=100, validators=[MinLengthValidator(1)], verbose_name="Фамилия пользователя")
-    phone = PhoneNumberField(validators=[MinLengthValidator(1)], verbose_name="Телефон для связи")
-    email = models.EmailField(max_length=100, unique=True, validators=[MinLengthValidator(1)], verbose_name="Электронная почта пользователя")
-    role = models.CharField(max_length=5, verbose_name="Роль пользователя", choices=UserRoles.choices, default=UserRoles.USER)
-    is_active = models.BooleanField(default=True)
-    image = models.ImageField(verbose_name="Аватарка пользователя", null=True)
+    first_name = models.CharField(max_length=64, validators=[MinLengthValidator(1)], verbose_name="Имя")
+    last_name = models.CharField(max_length=64, validators=[MinLengthValidator(1)], verbose_name="Фамилия")
+    phone = PhoneNumberField(max_length=128, validators=[MinLengthValidator(1)], verbose_name="Номер телефона")
+    email = models.EmailField(max_length=254, validators=[MinLengthValidator(1)], unique=True, verbose_name="e-mail")
+    role = models.CharField(max_length=6, choices=UserRoles.choices, default=UserRoles.USER, verbose_name="Роль")
+    image = models.ImageField(verbose_name="Аватарка", null=True, blank=True)
+    is_active = models.BooleanField(default=False)
 
-    # эта константа определяет поле для логина пользователя
     USERNAME_FIELD = "email"
-
-    # эта константа содержит список с полями, которые необходимо заполнить при создании пользователя
-    REQUIRED_FIELDS = ["first_name", "last_name", "phone", "role", "image"]
+    REQUIRED_FIELDS = ["first_name", "last_name", "phone"]
 
     objects = UserManager()
 
@@ -44,3 +47,6 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return self.is_admin
+
+    def __str__(self):
+        return self.email
